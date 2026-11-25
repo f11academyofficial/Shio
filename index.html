@@ -43,14 +43,53 @@ button:hover{filter:brightness(1.08)}
 .sym{font-size:2.4rem;line-height:1;margin-bottom:6px}
 .res p{margin:0;font-size:.92rem;color:var(--muted)}
 .note{margin:14px 0 0;padding:12px 14px;border-left:4px solid var(--gold);background:var(--soft);border-radius:0 8px 8px 0;font-size:.92rem}
+@media (min-width:641px){.res{padding:16px}}
+.det .sifat{margin:0 0 10px;color:var(--ink);font-size:.95rem}
+.det h3{margin:12px 0 4px;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--jade)}
+.det h3.w{color:var(--gold)}
+.det ul{margin:0;padding-left:18px;font-size:.92rem}
+.det li{margin:2px 0}
+.refl{margin-top:16px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:14px;padding:18px}
+.refl h2{font-family:var(--serif);font-size:1.3rem;margin:0 0 6px}
+.refl>p{margin:0 0 12px;color:var(--muted);font-size:.93rem}
+.refl ol{margin:0;padding-left:20px;font-size:.95rem}
+.refl li{margin:8px 0}
+.refl li small{display:block;color:var(--muted);font-size:.8rem}
+input[type=text]{width:100%;font:inherit;font-size:1.05rem;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.tabs{display:flex;gap:6px;margin:0 0 16px;background:var(--soft);padding:4px;border-radius:12px}
+.tabs button{flex:1;background:transparent;color:var(--muted);padding:10px 8px;font-weight:600}
+.tabs button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.person{flex:1 1 260px;display:flex;flex-direction:column;gap:8px}
+.person label{margin-bottom:0}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:.92rem}
+.pcard b{display:block;font-family:var(--serif);font-size:1.1rem;margin-bottom:6px;overflow-wrap:anywhere}
+.pcard div{margin:2px 0}
+.score{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.score .num{font-family:var(--serif);font-size:3rem;line-height:1;color:var(--jade)}
+.score .num small{font-size:1rem;color:var(--muted)}
+.score .rt{flex:1}
+.score .lab{margin:0 0 8px;font-weight:700}
+.bar{height:10px;background:var(--soft);border-radius:6px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--gold)}
+.row{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.row h3{margin:0 0 2px;font-size:1rem}
+.row .tag{margin:0 0 6px;font-size:.8rem;font-weight:700;color:var(--jade)}
+.row p.tx{margin:0;font-size:.92rem;color:var(--muted)}
 footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
 </style>
 </head>
 <body>
 <main>
   <h1>Cek shio, zodiak, dan elemen</h1>
-  <p class="lead">Isi tanggal lahir, hasilnya langsung muncul. Semua dihitung di browser kamu, tidak ada data yang dikirim ke mana pun.</p>
+  <p class="lead">Isi tanggal lahir, hasilnya langsung muncul. Ada juga tab Kecocokan untuk membandingkan dua tanggal lahir. Semua dihitung di browser kamu, tidak ada data yang dikirim ke mana pun.</p>
 
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" id="tab1" aria-selected="true">Satu orang</button>
+    <button type="button" role="tab" id="tab2" aria-selected="false">Kecocokan</button>
+  </div>
+
+  <div id="p1">
   <form id="f" novalidate>
     <div class="field">
       <label for="tgl">Tanggal lahir</label>
@@ -63,40 +102,98 @@ footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
   <section id="out" hidden aria-live="polite">
     <ul class="ring" id="ring" aria-label="Dua belas shio"></ul>
     <div class="grid">
-      <div class="res"><h2>Shio</h2><div class="sym" id="shioSym"></div><p class="big" id="shioNama"></p><p id="shioKet"></p></div>
-      <div class="res"><h2>Zodiak</h2><div class="sym" id="zodSym"></div><p class="big" id="zodNama"></p><p id="zodKet"></p></div>
-      <div class="res"><h2>Elemen tahun lahir</h2><div class="sym" id="elSym"></div><p class="big" id="elNama"></p><p id="elKet"></p></div>
+      <div class="res"><h2>Shio</h2><div class="sym" id="shioSym"></div><p class="big" id="shioNama"></p><p id="shioKet"></p><div class="det" id="shioDet"></div></div>
+      <div class="res"><h2>Zodiak</h2><div class="sym" id="zodSym"></div><p class="big" id="zodNama"></p><p id="zodKet"></p><div class="det" id="zodDet"></div></div>
+      <div class="res"><h2>Elemen tahun lahir</h2><div class="sym" id="elSym"></div><p class="big" id="elNama"></p><p id="elKet"></p><div class="det" id="elDet"></div></div>
     </div>
     <p class="note" id="note" hidden></p>
+    <section class="refl" aria-labelledby="reflH">
+      <h2 id="reflH">Refleksi</h2>
+      <p>Gambaran di atas adalah cermin umum dari tradisi shio dan zodiak, bukan ramalan atau vonis. Tidak semua poin akan terasa cocok. Ambil yang terasa benar, abaikan sisanya, lalu coba jawab pertanyaan berikut dengan jujur.</p>
+      <ol id="reflList"></ol>
+    </section>
   </section>
+
+  </div>
+
+  <div id="p2" hidden>
+    <form id="f2" novalidate>
+      <div class="person">
+        <label for="n1">Nama pertama (opsional)</label>
+        <input type="text" id="n1" maxlength="30" placeholder="Kamu" autocomplete="off">
+        <label for="t1">Tanggal lahir pertama</label>
+        <input type="date" id="t1" min="1900-01-01" max="2100-12-31" required>
+      </div>
+      <div class="person">
+        <label for="n2">Nama kedua (opsional)</label>
+        <input type="text" id="n2" maxlength="30" placeholder="Dia" autocomplete="off">
+        <label for="t2">Tanggal lahir kedua</label>
+        <input type="date" id="t2" min="1900-01-01" max="2100-12-31" required>
+      </div>
+      <button type="submit">Hitung kecocokan</button>
+      <p class="msg" id="msg2" role="alert"></p>
+    </form>
+
+    <section id="out2" hidden aria-live="polite" style="margin-top:24px">
+      <div class="duo" id="duo"></div>
+      <div class="score">
+        <div class="num"><span id="skor"></span><small>/100</small></div>
+        <div class="rt"><p class="lab" id="skorLab"></p><div class="bar"><span id="barFill"></span></div></div>
+      </div>
+      <div id="rows"></div>
+      <p class="note" id="note2" hidden></p>
+      <section class="refl" aria-labelledby="reflH2">
+        <h2 id="reflH2">Refleksi</h2>
+        <p>Skor ini hanya gambaran dari tradisi shio, zodiak, dan lima elemen, bukan penentu nasib hubungan. Kualitas hubungan lebih banyak ditentukan oleh komunikasi dan usaha kedua pihak.</p>
+        <ol>
+          <li>Apa yang kamu hargai dari cara berpikir dan bersikapnya?</li>
+          <li>Perbedaan mana yang selama ini terasa mengganggu, dan mungkinkah itu justru pelengkap?</li>
+          <li>Satu hal kecil apa yang bisa kamu lakukan minggu ini agar hubungan ini terasa lebih nyaman?</li>
+        </ol>
+      </section>
+    </section>
+  </div>
 
   <footer>Shio dan elemen tahun mengikuti Tahun Baru Imlek, bukan 1 Januari. Zodiak memakai batas tanggal umum, jadi yang lahir tepat di pergantian bisa berbeda satu hari antar sumber.</footer>
 </main>
 
 <script>
 (function(){
-  var SHIO=[["Tikus","🐀"],["Kerbau","🐂"],["Macan","🐅"],["Kelinci","🐇"],["Naga","🐉"],["Ular","🐍"],["Kuda","🐎"],["Kambing","🐐"],["Monyet","🐒"],["Ayam","🐓"],["Anjing","🐕"],["Babi","🐖"]];
-  var ELEMEN={
-    Logam:["⚙️","Tegas, rapi, dan berprinsip."],
-    Air:["💧","Fleksibel, peka, dan pandai beradaptasi."],
-    Kayu:["🌳","Tumbuh, kreatif, dan suka berkembang."],
-    Api:["🔥","Hangat, bersemangat, dan ekspresif."],
-    Tanah:["⛰️","Stabil, sabar, dan dapat diandalkan."]
-  };
-  var ZOD=[
-    ["Capricorn","♑","Tanah","Disiplin dan tekun."],
-    ["Aquarius","♒","Udara","Mandiri dan penuh gagasan."],
-    ["Pisces","♓","Air","Imajinatif dan berempati."],
-    ["Aries","♈","Api","Berani dan bersemangat."],
-    ["Taurus","♉","Tanah","Setia dan menyukai kenyamanan."],
-    ["Gemini","♊","Udara","Cepat belajar dan komunikatif."],
-    ["Cancer","♋","Air","Perhatian dan protektif."],
-    ["Leo","♌","Api","Percaya diri dan murah hati."],
-    ["Virgo","♍","Tanah","Teliti dan analitis."],
-    ["Libra","♎","Udara","Adil dan suka keseimbangan."],
-    ["Scorpio","♏","Air","Intens dan gigih."],
-    ["Sagittarius","♐","Api","Suka petualangan dan kebebasan."]
-  ];
+var SHIO=[
+["Tikus","🐀","Cerdik, mudah beradaptasi, dan jeli melihat peluang.","cerdas, luwes, hemat","mudah cemas, suka menimbun, kadang terlalu perhitungan","Kapan terakhir kamu berani melangkah tanpa menunggu semuanya terasa aman?"],
+["Kerbau","🐂","Tekun, jujur, dan memegang komitmen sampai selesai.","gigih, bisa diandalkan, sabar","keras kepala, sulit berubah, jarang meminta bantuan","Beban apa yang selama ini kamu pikul sendiri padahal boleh dibagi?"],
+["Macan","🐅","Berani, karismatik, dan suka memimpin.","percaya diri, penuh energi, setia kawan","impulsif, tidak suka diatur, mudah tersulut emosi","Saat marah, apa sebenarnya yang sedang kamu lindungi?"],
+["Kelinci","🐇","Lembut, halus budi, dan mencintai ketenangan.","diplomatis, peka, teliti","menghindari konflik, ragu memutuskan, mudah terluka","Keputusan apa yang kamu tunda karena takut mengecewakan orang lain?"],
+["Naga","🐉","Penuh visi, percaya diri, dan ambisius.","berani, karismatik, bersemangat tinggi","terlalu menuntut, kurang sabar, ego tinggi","Bagian mana dari targetmu yang perlu dinikmati prosesnya, bukan hanya hasilnya?"],
+["Ular","🐍","Tenang, mendalam, dan intuitif.","bijak, fokus, tajam membaca situasi","tertutup, sulit percaya, cenderung posesif","Siapa yang sebenarnya layak mendapat lebih banyak kepercayaanmu?"],
+["Kuda","🐎","Bebas, hangat, dan penuh semangat.","energik, ramah, cepat bergerak","tidak sabaran, mudah bosan, sering kurang tuntas","Apa yang ingin kamu selesaikan dulu sebelum memulai hal baru?"],
+["Kambing","🐐","Lembut, kreatif, dan berjiwa seni.","empatik, imajinatif, cinta damai","ragu-ragu, mudah galau, bergantung pada suasana","Apa yang kamu butuhkan agar merasa cukup aman untuk memutuskan sendiri?"],
+["Monyet","🐒","Cerdik, lincah, dan humoris.","pandai memecahkan masalah, inovatif, supel","mudah teralihkan, kurang konsisten, suka mengakali","Di mana kamu perlu bertahan lebih lama sebelum pindah ke hal lain?"],
+["Ayam","🐓","Rapi, teliti, dan pekerja keras.","disiplin, jujur, terorganisir","perfeksionis, suka mengkritik, kaku","Kapan sesuatu yang \u201ccukup baik\u201d sebenarnya sudah baik?"],
+["Anjing","🐕","Setia, jujur, dan punya rasa keadilan yang kuat.","loyal, dapat dipercaya, peduli","cemas berlebih, mudah curiga, terlalu keras pada diri sendiri","Kekhawatiran apa yang sebenarnya belum tentu terjadi?"],
+["Babi","🐖","Tulus, murah hati, dan pandai menikmati hidup.","baik hati, tulus, ramah","terlalu mudah percaya, sulit menolak, kurang waspada","Di mana kamu perlu belajar berkata \u201ctidak\u201d dengan tenang?"]
+];
+var ELEMEN={
+  Logam:["⚙️","Tegas, rapi, dan berprinsip.","disiplin, teguh, adil","kaku, dingin saat tertekan, sulit menerima kritik","Aturan mana yang bisa kamu longgarkan demi hubungan yang lebih hangat?"],
+  Air:["💧","Fleksibel, peka, dan pandai membaca keadaan.","adaptif, bijak, komunikatif","mudah ragu, terbawa arus, cenderung menghindar","Di mana kamu perlu bertahan, bukan sekadar mengalir?"],
+  Kayu:["🌳","Tumbuh, kreatif, dan suka berkembang.","inovatif, murah hati, visioner","terlalu banyak rencana, mudah kecewa, sulit mengatur energi","Apa yang perlu dirawat dulu sebelum kamu menanam hal baru?"],
+  Api:["🔥","Hangat, bersemangat, dan ekspresif.","antusias, inspiratif, berani","mudah meledak, cepat kehabisan tenaga, tidak sabar","Bagaimana caramu mengisi ulang setelah semangat habis?"],
+  Tanah:["⛰️","Stabil, sabar, dan dapat diandalkan.","setia, praktis, penyayang","enggan berubah, terlalu khawatir, menahan perasaan","Perubahan kecil apa yang bisa kamu coba minggu ini?"]
+};
+var ZOD=[
+["Capricorn","♑","Tanah","Disiplin, realistis, dan berorientasi pada tujuan.","tekun, bertanggung jawab, sabar","kaku, terlalu fokus kerja, sulit rileks","Kapan terakhir kamu beristirahat tanpa rasa bersalah?"],
+["Aquarius","♒","Udara","Mandiri, orisinal, dan memikirkan gambaran besar.","inovatif, berpikiran terbuka, setia pada prinsip","terkesan berjarak, keras kepala soal gagasan, sulit mengungkap perasaan","Perasaan apa yang lebih mudah kamu pikirkan daripada kamu ungkapkan?"],
+["Pisces","♓","Air","Peka, imajinatif, dan berhati lembut.","empatik, kreatif, intuitif","mudah larut dalam emosi orang lain, suka lari dari kenyataan, kurang tegas","Batas apa yang perlu kamu buat supaya energimu tidak terkuras?"],
+["Aries","♈","Api","Berani, spontan, dan suka memulai.","berani, antusias, jujur","impulsif, tidak sabar, mudah tersulut","Apa yang berubah jika kamu menunggu satu tarikan napas sebelum bereaksi?"],
+["Taurus","♉","Tanah","Setia, tenang, dan menyukai kenyamanan.","sabar, bisa diandalkan, tekun","keras kepala, sulit melepas, lamban berubah","Kebiasaan apa yang masih kamu pertahankan hanya karena sudah nyaman?"],
+["Gemini","♊","Udara","Penasaran, komunikatif, dan cepat belajar.","luwes, cerdas, supel","gampang bosan, pikiran berpindah-pindah, kurang konsisten","Satu hal apa yang layak kamu dalami lebih lama?"],
+["Cancer","♋","Air","Peduli, protektif, dan kuat dalam ikatan keluarga.","penyayang, intuitif, loyal","mudah tersinggung, menyimpan luka, terlalu melindungi","Perasaan apa yang masih kamu simpan sendiri?"],
+["Leo","♌","Api","Percaya diri, hangat, dan murah hati.","karismatik, setia, berjiwa pemimpin","butuh pengakuan, gengsi tinggi, cenderung dominan","Kapan kamu merasa cukup berharga tanpa tepuk tangan?"],
+["Virgo","♍","Tanah","Teliti, praktis, dan suka membantu.","analitis, rajin, andal","terlalu kritis, mudah khawatir, perfeksionis","Apa dari dirimu yang sudah layak kamu apresiasi hari ini?"],
+["Libra","♎","Udara","Adil, ramah, dan mencintai harmoni.","diplomatis, punya selera estetika, pandai menengahi","sulit memutuskan, menghindari konflik, terlalu ingin menyenangkan orang","Apa yang sebenarnya kamu inginkan, lepas dari harapan orang lain?"],
+["Scorpio","♏","Air","Intens, gigih, dan berjiwa mendalam.","tangguh, fokus, setia","mudah curiga, sulit memaafkan, cenderung mengendalikan","Apa yang akan terasa lebih ringan jika kamu lepaskan?"],
+["Sagittarius","♐","Api","Optimis, bebas, dan haus petualangan.","antusias, jujur, berpikiran luas","terlalu blak-blakan, tidak suka terikat, sering mengabaikan detail","Komitmen apa yang justru bisa memberimu kebebasan lebih besar?"]
+];
   var CUT=[20,19,21,20,21,21,23,23,23,23,22,22];
   var BULAN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
   var $=function(id){return document.getElementById(id)};
@@ -132,6 +229,119 @@ footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
   }
   function fmt(dt){return dt.getDate()+" "+BULAN[dt.getMonth()]+" "+dt.getFullYear();}
 
+
+  function det(id,sifat,kuat,lemah){
+    var box=$(id); box.textContent="";
+    var p=document.createElement("p"); p.className="sifat"; p.textContent=sifat; box.appendChild(p);
+    [["Kekuatan",kuat,""],["Kelemahan",lemah,"w"]].forEach(function(x){
+      var h=document.createElement("h3"); h.textContent=x[0]; if(x[2]) h.className=x[2]; box.appendChild(h);
+      var ul=document.createElement("ul");
+      x[1].split(", ").forEach(function(t){
+        var li=document.createElement("li"); li.textContent=t.charAt(0).toUpperCase()+t.slice(1); ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    });
+  }
+  function refleksi(items){
+    var ol=$("reflList"); ol.textContent="";
+    items.forEach(function(it){
+      var li=document.createElement("li"); li.textContent=it[1];
+      var sm=document.createElement("small"); sm.textContent=it[0]; li.appendChild(sm);
+      ol.appendChild(li);
+    });
+  }
+
+
+  function mk(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
+  function calc(v){
+    var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v); if(!m) return null;
+    var y=+m[1],mo=+m[2],d=+m[3]; if(y<1900||y>2100) return null;
+    var im=tahunImlek(y,mo,d), ty=im.y, si=((ty-4)%12+12)%12, dg=ty%10;
+    return {si:si,shio:SHIO[si],ty:ty,yang:ty%2===0,
+      el:dg<2?"Logam":dg<4?"Air":dg<6?"Kayu":dg<8?"Api":"Tanah",
+      z:zodiakFix(mo,d),exact:im.exact};
+  }
+  function lab(n){return n>=80?"Sangat serasi":n>=70?"Serasi":n>=60?"Cukup serasi":n>=50?"Perlu penyesuaian":"Menantang, tapi bisa dijalani";}
+  function pair(a,b,x,y){return (a===x&&b===y)||(a===y&&b===x);}
+
+  function shioRel(a,b){
+    if(a===b) return [70,"Sama-sama bershio "+SHIO[a][0]+": mudah saling paham tanpa banyak kata. Kebiasaan dan kelemahan yang sama bisa saling menguatkan, jadi perlu saling mengingatkan."];
+    if((a+b)%12===1) return [90,"Pasangan harmoni (Liu He): dua shio ini dikenal saling melengkapi dan mudah merasa nyaman satu sama lain."];
+    if(a%4===b%4) return [85,"Satu kelompok tiga serangkai (San He): visi dan ritme hidup cenderung searah, sehingga mudah bekerja sama."];
+    if(Math.abs(a-b)===6) return [40,"Berseberangan (Liu Chong): gaya dan prioritas bisa bertolak belakang. Kalau sama-sama mau mendengar, perbedaan itu justru bisa saling menyeimbangkan."];
+    if((a+b)%12===7) return [50,"Hubungan Liu Hai: ada kecenderungan salah paham kecil yang menumpuk. Komunikasi terbuka sejak awal jadi kuncinya."];
+    return [65,"Tidak ada pola khusus dalam tradisi shio untuk pasangan ini. Kecocokan lebih ditentukan oleh sifat pribadi masing-masing."];
+  }
+  var GEN={Kayu:"Api",Api:"Tanah",Tanah:"Logam",Logam:"Air",Air:"Kayu"};
+  var OVR={Kayu:"Tanah",Tanah:"Air",Air:"Api",Api:"Logam",Logam:"Kayu"};
+  function elemenRel(a,b){
+    if(a===b) return [75,"Sama-sama elemen "+a+": selaras dan saling memahami. Waspadai kelemahan yang sama."];
+    if(GEN[a]===b) return [90,a+" menghidupi "+b+" dalam siklus lima elemen: hubungan yang saling menopang. Pastikan peran penopang tidak selalu dipegang satu pihak."];
+    if(GEN[b]===a) return [90,b+" menghidupi "+a+" dalam siklus lima elemen: hubungan yang saling menopang. Pastikan peran penopang tidak selalu dipegang satu pihak."];
+    var t=(OVR[a]===b?a+" menaklukkan "+b:b+" menaklukkan "+a);
+    return [50,t+" dalam siklus lima elemen: ada potensi tarik-ulur dan salah satu pihak bisa terasa dominan. Beri ruang dan hormati perbedaan."];
+  }
+  function zodRel(za,zb){
+    var ea=za[2],eb=zb[2],sc,tx;
+    if(za===zb){sc=75;tx="Sama-sama "+za[0]+": cara merasa dan bereaksi mirip, tetapi kelemahan yang sama juga mudah muncul bersamaan.";}
+    else if(ea===eb){sc=80;tx="Satu elemen ("+ea+"): cara merasa dan bereaksi mirip, jadi mudah nyambung.";}
+    else if(pair(ea,eb,"Api","Udara")){sc=85;tx="Api dan Udara saling menyalakan: semangat dan gagasan berpadu.";}
+    else if(pair(ea,eb,"Tanah","Air")){sc=85;tx="Tanah dan Air saling menyuburkan: stabil dan penuh kepedulian.";}
+    else if(pair(ea,eb,"Api","Air")){sc=50;tx="Api dan Air: intensitas dan perasaan bisa bentrok. Butuh kesabaran, tetapi bisa saling melembutkan.";}
+    else if(pair(ea,eb,"Udara","Tanah")){sc=50;tx="Udara dan Tanah: yang satu suka bergerak bebas, yang lain suka kepastian. Cari titik tengahnya.";}
+    else if(pair(ea,eb,"Api","Tanah")){sc=62;tx="Api dan Tanah: semangat bertemu kepraktisan, saling melengkapi bila dihargai.";}
+    else {sc=62;tx="Udara dan Air: pikiran bertemu perasaan, perlu saling menerjemahkan.";}
+    if(Math.abs(ZOD.indexOf(za)-ZOD.indexOf(zb))===6) tx+=" Tanda yang berseberangan sering saling tertarik karena saling melengkapi.";
+    return [sc,tx];
+  }
+  function pcard(name,fallback,P){
+    var c=mk("div","pcard"); c.appendChild(mk("b","",name||fallback));
+    c.appendChild(mk("div","",P.shio[1]+" "+P.shio[0]));
+    c.appendChild(mk("div","",P.z[1]+" "+P.z[0]));
+    c.appendChild(mk("div","",ELEMEN[P.el][0]+" "+P.el+(P.yang?" Yang":" Yin")));
+    return c;
+  }
+  function row(title,r){
+    var d=mk("div","row"); d.appendChild(mk("h3","",title));
+    d.appendChild(mk("p","tag",lab(r[0])+" · "+r[0]+"/100"));
+    d.appendChild(mk("p","tx",r[1])); return d;
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".tabs button"),function(b,i,all){
+    b.addEventListener("click",function(){
+      Array.prototype.forEach.call(all,function(x){x.setAttribute("aria-selected",x===b?"true":"false");});
+      $("p1").hidden=b.id!=="tab1"; $("p2").hidden=b.id!=="tab2";
+    });
+  });
+
+  $("f2").addEventListener("submit",function(e){
+    e.preventDefault();
+    var msg=$("msg2"); msg.textContent="";
+    var A=calc($("t1").value), B=calc($("t2").value);
+    if(!A||!B){msg.textContent="Isi kedua tanggal lahir (tahun 1900-2100).";$("out2").hidden=true;return;}
+    var rs=shioRel(A.si,B.si), re=elemenRel(A.el,B.el), rz=zodRel(A.z,B.z);
+    var total=Math.round(rs[0]*0.4+re[0]*0.3+rz[0]*0.3);
+
+    var duo=$("duo"); duo.textContent="";
+    duo.appendChild(pcard($("n1").value.trim(),"Orang pertama",A));
+    duo.appendChild(pcard($("n2").value.trim(),"Orang kedua",B));
+    $("skor").textContent=total;
+    $("skorLab").textContent=lab(total);
+    $("barFill").style.width=total+"%";
+    var rows=$("rows"); rows.textContent="";
+    rows.appendChild(row("Shio: "+A.shio[0]+" & "+B.shio[0],rs));
+    rows.appendChild(row("Elemen tahun: "+A.el+" & "+B.el,re));
+    rows.appendChild(row("Zodiak: "+A.z[0]+" & "+B.z[0],rz));
+    var note=$("note2");
+    if(!A.exact||!B.exact){
+      note.hidden=false;
+      note.textContent="Browser ini belum mendukung kalender Tionghoa, jadi batas Imlek diperkirakan 4 Februari. Hasil untuk yang lahir akhir Januari sampai pertengahan Februari bisa meleset.";
+    }else{
+      note.hidden=true;
+    }
+    $("out2").hidden=false;
+  });
+
   var ring=$("ring");
   SHIO.forEach(function(s){var li=document.createElement("li");li.textContent=s[1];li.title=s[0];ring.appendChild(li);});
 
@@ -154,12 +364,16 @@ footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
     $("shioSym").textContent=s[1];
     $("shioNama").textContent=s[0];
     $("shioKet").textContent="Tahun Imlek "+ty;
+    det("shioDet",s[2],s[3],s[4]);
     $("zodSym").textContent=z[1];
     $("zodNama").textContent=z[0];
-    $("zodKet").textContent="Elemen "+z[2]+". "+z[3];
+    $("zodKet").textContent="Elemen "+z[2];
+    det("zodDet",z[3],z[4],z[5]);
     $("elSym").textContent=ELEMEN[el][0];
     $("elNama").textContent=el+(yang?" Yang":" Yin");
-    $("elKet").textContent=ELEMEN[el][1];
+    $("elKet").textContent="Dari tahun Imlek "+ty;
+    det("elDet",ELEMEN[el][1],ELEMEN[el][2],ELEMEN[el][3]);
+    refleksi([["Dari shio "+s[0],s[5]],["Dari zodiak "+z[0],z[6]],["Dari elemen "+el,ELEMEN[el][4]],["Penutup","Dari ketiganya, sifat mana yang paling terasa seperti kamu, dan mana yang ingin kamu kembangkan?"]]);
 
     Array.prototype.forEach.call(ring.children,function(li,i){
       if(i===si) li.setAttribute("aria-current","true"); else li.removeAttribute("aria-current");
