@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cek Shio, Zodiak &amp; Elemen dari Tanggal Lahir</title>
+<meta name="description" content="Masukkan tanggal lahir, langsung tahu shio, zodiak, dan elemen. Shio dihitung dengan batas Tahun Baru Imlek.">
+<style>
+:root{
+  --bg:#edf1ee; --card:#fbfcfb; --ink:#1d2a3a; --muted:#5b6b78; --line:#cfd8d3;
+  --jade:#2c6e5c; --gold:#b98a2c; --soft:#dfe8e3; --err:#a3282a;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#16201e; --card:#1e2b28; --ink:#e6eee9; --muted:#9db0a8; --line:#34463f; --jade:#6fc2a7; --gold:#e0b45a; --soft:#283833; --err:#f08a85;}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;padding:24px 16px 48px}
+main{max-width:760px;margin:0 auto}
+h1{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.3rem);line-height:1.2;margin:8px 0 8px;font-weight:700}
+.lead{color:var(--muted);margin:0 0 24px;max-width:60ch}
+form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+label{display:block;font-size:.9rem;font-weight:600;margin-bottom:6px;width:100%}
+.field{flex:1 1 220px}
+input[type=date]{width:100%;font:inherit;font-size:1.05rem;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+button{font:inherit;font-weight:700;padding:12px 22px;border:0;border-radius:8px;background:var(--jade);color:#fff;cursor:pointer}
+@media (prefers-color-scheme:dark){button{color:#10201b}}
+button:hover{filter:brightness(1.08)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.msg{width:100%;margin:0;font-size:.9rem;color:var(--err);min-height:1.2em}
+#out[hidden]{display:none}
+#out{margin-top:24px}
+.ring{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:0 0 20px;padding:0;list-style:none}
+.ring li{width:44px;height:44px;display:grid;place-items:center;font-size:1.5rem;border-radius:50%;background:var(--soft);opacity:.55}
+.ring li[aria-current=true]{opacity:1;background:var(--gold);transform:scale(1.18);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:640px){.grid{grid-template-columns:1fr}}
+.res{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.res h2{margin:0 0 4px;font-size:.9rem;color:var(--muted);font-weight:600}
+.big{font-family:var(--serif);font-size:1.7rem;line-height:1.2;margin:0 0 6px}
+.sym{font-size:2.4rem;line-height:1;margin-bottom:6px}
+.res p{margin:0;font-size:.92rem;color:var(--muted)}
+.note{margin:14px 0 0;padding:12px 14px;border-left:4px solid var(--gold);background:var(--soft);border-radius:0 8px 8px 0;font-size:.92rem}
+footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Cek shio, zodiak, dan elemen</h1>
+  <p class="lead">Isi tanggal lahir, hasilnya langsung muncul. Semua dihitung di browser kamu, tidak ada data yang dikirim ke mana pun.</p>
+
+  <form id="f" novalidate>
+    <div class="field">
+      <label for="tgl">Tanggal lahir</label>
+      <input type="date" id="tgl" min="1900-01-01" max="2100-12-31" required>
+    </div>
+    <button type="submit">Lihat hasil</button>
+    <p class="msg" id="msg" role="alert"></p>
+  </form>
+
+  <section id="out" hidden aria-live="polite">
+    <ul class="ring" id="ring" aria-label="Dua belas shio"></ul>
+    <div class="grid">
+      <div class="res"><h2>Shio</h2><div class="sym" id="shioSym"></div><p class="big" id="shioNama"></p><p id="shioKet"></p></div>
+      <div class="res"><h2>Zodiak</h2><div class="sym" id="zodSym"></div><p class="big" id="zodNama"></p><p id="zodKet"></p></div>
+      <div class="res"><h2>Elemen tahun lahir</h2><div class="sym" id="elSym"></div><p class="big" id="elNama"></p><p id="elKet"></p></div>
+    </div>
+    <p class="note" id="note" hidden></p>
+  </section>
+
+  <footer>Shio dan elemen tahun mengikuti Tahun Baru Imlek, bukan 1 Januari. Zodiak memakai batas tanggal umum, jadi yang lahir tepat di pergantian bisa berbeda satu hari antar sumber.</footer>
+</main>
+
+<script>
+(function(){
+  var SHIO=[["Tikus","🐀"],["Kerbau","🐂"],["Macan","🐅"],["Kelinci","🐇"],["Naga","🐉"],["Ular","🐍"],["Kuda","🐎"],["Kambing","🐐"],["Monyet","🐒"],["Ayam","🐓"],["Anjing","🐕"],["Babi","🐖"]];
+  var ELEMEN={
+    Logam:["⚙️","Tegas, rapi, dan berprinsip."],
+    Air:["💧","Fleksibel, peka, dan pandai beradaptasi."],
+    Kayu:["🌳","Tumbuh, kreatif, dan suka berkembang."],
+    Api:["🔥","Hangat, bersemangat, dan ekspresif."],
+    Tanah:["⛰️","Stabil, sabar, dan dapat diandalkan."]
+  };
+  var ZOD=[
+    ["Capricorn","♑","Tanah","Disiplin dan tekun."],
+    ["Aquarius","♒","Udara","Mandiri dan penuh gagasan."],
+    ["Pisces","♓","Air","Imajinatif dan berempati."],
+    ["Aries","♈","Api","Berani dan bersemangat."],
+    ["Taurus","♉","Tanah","Setia dan menyukai kenyamanan."],
+    ["Gemini","♊","Udara","Cepat belajar dan komunikatif."],
+    ["Cancer","♋","Air","Perhatian dan protektif."],
+    ["Leo","♌","Api","Percaya diri dan murah hati."],
+    ["Virgo","♍","Tanah","Teliti dan analitis."],
+    ["Libra","♎","Udara","Adil dan suka keseimbangan."],
+    ["Scorpio","♏","Air","Intens dan gigih."],
+    ["Sagittarius","♐","Api","Suka petualangan dan kebebasan."]
+  ];
+  var CUT=[20,19,21,20,21,21,23,23,23,23,22,22];
+  var BULAN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  var $=function(id){return document.getElementById(id)};
+
+  function zodiakFix(m,d){
+    var after=[1,2,3,4,5,6,7,8,9,10,11,0]; // tanda yang mulai pada bulan m
+    var idx = d>=CUT[m-1] ? after[m-1] : after[(m+10)%12];
+    return ZOD[idx];
+  }
+
+  function parts(date,opts){
+    return new Intl.DateTimeFormat("en-u-ca-chinese",opts).formatToParts(date);
+  }
+  function tahunImlek(y,m,d){
+    var date=new Date(y,m-1,d,12);
+    try{
+      var p=parts(date,{year:"numeric"}).filter(function(x){return x.type==="relatedYear"})[0];
+      if(p){var v=parseInt(p.value,10); if(v>1800) return {y:v,exact:true};}
+    }catch(e){}
+    // Cadangan kasar jika browser tidak mendukung kalender Tionghoa: batas 4 Februari
+    return {y:(m<2||(m===2&&d<4))?y-1:y,exact:false};
+  }
+  function tanggalImlek(y){
+    try{
+      for(var dd=new Date(y,0,19,12),i=0;i<36;i++,dd.setDate(dd.getDate()+1)){
+        var p=parts(dd,{month:"numeric",day:"numeric"});
+        var mo=p.filter(function(x){return x.type==="month"})[0];
+        var da=p.filter(function(x){return x.type==="day"})[0];
+        if(mo&&da&&mo.value==="1"&&da.value==="1") return new Date(dd);
+      }
+    }catch(e){}
+    return null;
+  }
+  function fmt(dt){return dt.getDate()+" "+BULAN[dt.getMonth()]+" "+dt.getFullYear();}
+
+  var ring=$("ring");
+  SHIO.forEach(function(s){var li=document.createElement("li");li.textContent=s[1];li.title=s[0];ring.appendChild(li);});
+
+  $("f").addEventListener("submit",function(e){
+    e.preventDefault();
+    var v=$("tgl").value, msg=$("msg");
+    msg.textContent="";
+    var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+    if(!m){msg.textContent="Isi tanggal lahir dulu.";$("out").hidden=true;return;}
+    var y=+m[1],mo=+m[2],d=+m[3];
+    if(y<1900||y>2100){msg.textContent="Tahun harus antara 1900 dan 2100.";$("out").hidden=true;return;}
+
+    var im=tahunImlek(y,mo,d), ty=im.y;
+    var si=((ty-4)%12+12)%12, s=SHIO[si];
+    var yang=ty%2===0;
+    var digit=ty%10;
+    var el=digit<2?"Logam":digit<4?"Air":digit<6?"Kayu":digit<8?"Api":"Tanah";
+    var z=zodiakFix(mo,d);
+
+    $("shioSym").textContent=s[1];
+    $("shioNama").textContent=s[0];
+    $("shioKet").textContent="Tahun Imlek "+ty;
+    $("zodSym").textContent=z[1];
+    $("zodNama").textContent=z[0];
+    $("zodKet").textContent="Elemen "+z[2]+". "+z[3];
+    $("elSym").textContent=ELEMEN[el][0];
+    $("elNama").textContent=el+(yang?" Yang":" Yin");
+    $("elKet").textContent=ELEMEN[el][1];
+
+    Array.prototype.forEach.call(ring.children,function(li,i){
+      if(i===si) li.setAttribute("aria-current","true"); else li.removeAttribute("aria-current");
+    });
+
+    var note=$("note");
+    if(!im.exact){
+      note.hidden=false;
+      note.textContent="Browser ini belum mendukung kalender Tionghoa, jadi batas Imlek diperkirakan 4 Februari. Untuk yang lahir akhir Januari sampai pertengahan Februari, hasilnya bisa meleset. Coba browser yang lebih baru.";
+    }else if(ty!==y){
+      var imlek=tanggalImlek(y);
+      note.hidden=false;
+      note.textContent="Kamu lahir sebelum Imlek "+y+(imlek?" ("+fmt(imlek)+")":"")+", jadi shio dan elemen dihitung memakai tahun "+ty+".";
+    }else{
+      note.hidden=true;
+    }
+    $("out").hidden=false;
+  });
+})();
+</script>
+</body>
+</html>
