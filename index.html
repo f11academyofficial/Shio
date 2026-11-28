@@ -82,6 +82,13 @@ input[type=text]{width:100%;font:inherit;font-size:1.05rem;padding:11px 12px;bor
 .acts button{padding:10px 18px}
 .acts button.alt{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
 .acts .st{font-size:.88rem;color:var(--muted);min-height:1.2em}
+.deep{margin-top:16px}
+.deep>h2{font-family:var(--serif);font-size:1.3rem;margin:0 0 10px}
+.deep .sint{margin:0 0 12px;padding:14px 16px;border-left:4px solid var(--jade);background:var(--soft);border-radius:0 10px 10px 0;font-size:.95rem}
+.deep .blk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.deep .blk h3{margin:0 0 6px;font-size:1rem}
+.deep .blk p{margin:6px 0;font-size:.92rem;color:var(--muted)}
+.deep .blk p b{color:var(--jade);font-weight:700}
 footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
 .faq{margin-top:32px}
 .faq>h2{font-family:var(--serif);font-size:1.4rem;margin:0 0 12px}
@@ -125,6 +132,7 @@ footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
       <div class="res"><h2>Elemen tahun lahir</h2><div class="sym" id="elSym"></div><p class="big" id="elNama"></p><p id="elKet"></p><div class="det" id="elDet"></div></div>
     </div>
     <p class="note" id="note" hidden></p>
+    <section class="deep" id="deep" aria-labelledby="deepH"></section>
     <section class="refl" aria-labelledby="reflH">
       <h2 id="reflH">Refleksi</h2>
       <p>Gambaran di atas adalah cermin umum dari tradisi shio dan zodiak, bukan ramalan atau vonis. Tidak semua poin akan terasa cocok. Ambil yang terasa benar, abaikan sisanya, lalu coba jawab pertanyaan berikut dengan jujur.</p>
@@ -497,6 +505,69 @@ var ZOD=[
     $("sv"+n).addEventListener("click",function(){doSave(n);});
   });
 
+  var DSH=[
+"Unggul di analisis, strategi, dan membaca peluang.|Perhatian dan setia, tetapi sulit terbuka soal kecemasan.|Percayai prosesnya dan nikmati hasil, bukan hanya menyiapkan cadangan.",
+"Andal dan tuntas: cocok di peran yang menuntut konsistensi jangka panjang.|Setia dan stabil, namun jarang mengungkap kebutuhan sendiri.|Belajar meminta bantuan dan membuka diri pada cara baru.",
+"Bersinar saat memimpin, merintis, atau mengambil risiko terukur.|Hangat dan protektif; butuh ruang dan penghargaan atas kebebasanmu.|Beri jeda sebelum bereaksi supaya energimu tidak menguras hubungan.",
+"Kuat di peran yang butuh ketelitian, diplomasi, dan kerja sama.|Lembut dan penuh pengertian, tetapi bisa memendam rasa demi damai.|Latih berkata jujur lebih awal agar konflik kecil tidak menumpuk.",
+"Cocok memimpin gagasan besar dan menggerakkan banyak orang.|Murah hati dan dikagumi, tetapi mudah menuntut dirimu dan orang lain.|Latih kesabaran dan dengar masukan sebelum melangkah.",
+"Unggul di riset, perencanaan, dan keputusan yang dipikirkan matang.|Mendalam dan setia; pelan memberi kepercayaan, lalu sangat tulus.|Belajar percaya lebih cepat dan melepas keinginan mengendalikan.",
+"Hidup di pekerjaan yang dinamis, bertemu orang, dan penuh kebebasan.|Hangat dan seru, tetapi butuh ruang untuk bergerak.|Tuntaskan satu komitmen sebelum membuka yang baru.",
+"Bersinar di bidang kreatif, perawatan, dan suasana kerja yang suportif.|Penyayang dan peka; bisa terlalu bergantung pada suasana hati.|Latih mengambil keputusan sendiri dengan langkah kecil.",
+"Cepat belajar dan lihai mencari solusi; senang tantangan baru.|Humoris dan menyenangkan, namun bisa terkesan sulit dipegang.|Bertahan lebih lama pada satu hal supaya hasilnya matang.",
+"Rapi, disiplin, dan detail: unggul di pekerjaan yang butuh akurasi.|Jujur dan peduli, tetapi kritik bisa terdengar tajam.|Hargai proses; \u201ccukup baik\u201d sering sudah sangat baik.",
+"Dapat dipercaya, adil, dan kuat di peran yang menuntut integritas.|Pelindung setia, tetapi mudah curiga bila merasa tidak aman.|Bedakan kekhawatiran dari kenyataan dan beri dirimu kelonggaran.",
+"Tulus dan suportif; nyaman di tim yang saling menolong.|Murah hati dan penuh kasih, tetapi sulit menolak permintaan.|Tetapkan batas yang sehat agar kebaikanmu tidak dimanfaatkan."
+];
+  var DZ={
+Capricorn:"Ambisius dan tahan banting; cocok mendaki jenjang dengan target jelas.|Serius dan setia, tetapi sulit menunjukkan kelembutan.|Izinkan dirimu beristirahat dan merayakan capaian kecil.",
+Aquarius:"Inovatif dan berpikir ke depan; unggul di ide baru dan kerja lintas bidang.|Teman yang suportif, tapi butuh ruang dan bisa terkesan berjarak.|Latih mengungkapkan perasaan, bukan hanya gagasan.",
+Pisces:"Imajinatif dan empatik; kuat di seni, pelayanan, dan peran yang melibatkan hati.|Penyayang dan intuitif, mudah menyerap emosi orang lain.|Buat batas yang jelas supaya energimu terjaga.",
+Aries:"Berani memulai dan memimpin; hidup di lingkungan yang bergerak cepat.|Jujur dan bergairah; perlu menahan reaksi saat emosi naik.|Beri jeda sebelum bertindak, dan selesaikan yang sudah dimulai.",
+Taurus:"Tekun dan realistis; unggul di pekerjaan yang butuh kestabilan dan kualitas.|Setia, sabar, dan menenangkan; bisa keras kepala saat berbeda pendapat.|Cobalah keluar dari zona nyaman satu langkah kecil.",
+Gemini:"Komunikatif dan cepat belajar; cocok di bidang yang beragam dan berbasis ide.|Menyenangkan diajak bicara, tetapi perhatian mudah berpindah.|Pilih satu fokus utama dan dalami hingga tuntas.",
+Cancer:"Peduli dan teliti pada kebutuhan orang; kuat di peran yang membangun rasa aman.|Hangat dan melindungi; mudah tersinggung dan memendam luka.|Sampaikan perasaan secara langsung, jangan menunggu ditebak.",
+Leo:"Karismatik dan murah hati; bersinar saat memimpin dan memberi inspirasi.|Setia dan hangat, tetapi butuh diapresiasi.|Cari rasa berharga dari dalam, bukan hanya dari tepuk tangan.",
+Virgo:"Analitis dan rapi; unggul dalam detail, perbaikan, dan layanan yang cermat.|Perhatian lewat tindakan, namun cenderung terlalu mengkritik.|Terima ketidaksempurnaan sebagai bagian dari proses.",
+Libra:"Adil, diplomatis, dan estetis; cocok di peran mediasi, desain, dan kerja sama.|Penuh kasih dan mencari harmoni; sulit tegas saat harus memilih.|Latih mengambil keputusan tanpa menunggu semua pihak setuju.",
+Scorpio:"Fokus, gigih, dan tajam membaca motif; kuat di riset dan situasi menekan.|Intens dan sangat setia; sulit percaya dan mudah menyimpan dendam.|Belajar memaafkan dan melonggarkan kendali.",
+Sagittarius:"Optimis dan haus belajar; cocok di bidang yang luas, bebas, dan penuh petualangan.|Jujur dan menyenangkan, tapi bicaranya bisa terlalu blak-blakan.|Pikirkan dampak kata-kata dan tuntaskan detail kecil."
+};
+  var DE={
+Logam:"Tegas, sistematis, dan menjaga standar tinggi.|Setia pada prinsip; bisa terlihat dingin saat tertekan.|Beri ruang bagi kelembutan dan fleksibilitas.",
+Air:"Luwes membaca situasi dan pandai berkomunikasi.|Peka dan mudah memahami orang; mudah terbawa suasana.|Pegang tujuan jelas agar tidak ikut arus.",
+Kayu:"Kreatif, visioner, dan suka mengembangkan sesuatu yang baru.|Murah hati dan mendukung pertumbuhan orang lain.|Pilih prioritas supaya energi tidak tersebar.",
+Api:"Antusias dan inspiratif; menggerakkan orang lewat semangat.|Hangat dan ekspresif, tetapi bisa cepat meledak lalu padam.|Jaga ritme: istirahat sama pentingnya dengan bergerak.",
+Tanah:"Stabil, sabar, dan menjadi penopang tim.|Setia dan perhatian; enggan berubah bila merasa nyaman.|Coba hal baru pelan-pelan, tanpa harus kehilangan rasa aman."
+};
+  var TRI=[
+["Penggerak Gagasan","Tikus, Naga, Monyet","Kelompokmu cerdas, ambisius, dan cepat membaca peluang; kekuatan terbesarmu adalah ide dan keberanian bermanuver."],
+["Penata Ketekunan","Kerbau, Ular, Ayam","Kelompokmu teliti, terstruktur, dan matang dalam merencanakan; kekuatan terbesarmu adalah ketuntasan."],
+["Pejuang Idealis","Macan, Kuda, Anjing","Kelompokmu bersemangat, berprinsip, dan setia pada apa yang diyakini; kekuatan terbesarmu adalah keberanian dan loyalitas."],
+["Penjaga Harmoni","Kelinci, Kambing, Babi","Kelompokmu lembut, artistik, dan peka pada orang lain; kekuatan terbesarmu adalah empati dan kemampuan menenangkan suasana."]
+];
+  var ZEL={Api:"digerakkan semangat dan spontanitas",Tanah:"mengutamakan kepraktisan dan rasa aman",Udara:"mengutamakan pikiran, gagasan, dan komunikasi",Air:"digerakkan perasaan dan intuisi"};
+  var ELD={Logam:"membawa nuansa disiplin dan prinsip",Air:"membawa nuansa kelenturan dan kepekaan",Kayu:"membawa nuansa pertumbuhan dan kreativitas",Api:"membawa nuansa semangat dan ekspresi",Tanah:"membawa nuansa kestabilan dan kesetiaan"};
+  function deep(si,z,el,yang){
+    var box=$("deep"); box.textContent="";
+    box.appendChild(mk("h2","","Analisa lebih dalam"));
+    var t=TRI[si%4];
+    box.appendChild(mk("p","sint","Perpaduanmu: kelompok "+t[0]+" ("+t[1]+"). "+t[2]+" Zodiak "+z[0]+" membuat caramu menjalani hidup "+ZEL[z[2]]+", sementara elemen "+el+" "+(yang?"Yang":"Yin")+" "+ELD[el]+(yang?", dengan kecenderungan lebih aktif dan menonjol.":", dengan kecenderungan lebih tenang dan reflektif.")));
+    var src=[["Shio "+SHIO[si][0],DSH[si].split("|")],["Zodiak "+z[0],DZ[z[0]].split("|")],["Elemen "+el,DE[el].split("|")]];
+    [["Karier dan cara kerja",0],["Relasi dan komunikasi",1],["Langkah bertumbuh",2]].forEach(function(h){
+      var b=mk("div","blk"); b.appendChild(mk("h3","",h[0]));
+      src.forEach(function(x){var p=mk("p",""); p.appendChild(mk("b","",x[0]+": ")); p.appendChild(document.createTextNode(x[1][h[1]])); b.appendChild(p);});
+      box.appendChild(b);
+    });
+    var nm=function(f){var r=[];for(var j=0;j<12;j++) if(j!==si&&f(j)) r.push(SHIO[j][0]); return r.join(", ");};
+    var c=mk("div","blk"); c.appendChild(mk("h3","","Kecocokan shio-mu"));
+    [["Paling harmonis",nm(function(j){return (si+j)%12===1;})],["Searah visi",nm(function(j){return j%4===si%4;})],["Berseberangan",SHIO[(si+6)%12][0]],["Perlu komunikasi ekstra",nm(function(j){return (si+j)%12===7;})]].forEach(function(x){
+      var p=mk("p",""); p.appendChild(mk("b","",x[0]+": ")); p.appendChild(document.createTextNode(x[1])); c.appendChild(p);
+    });
+    c.appendChild(mk("p","","Ini hanya pola tradisi. Hubungan yang baik tetap dibangun lewat komunikasi, bukan ditentukan shio."));
+    box.appendChild(c);
+  }
+
   var ring=$("ring");
   SHIO.forEach(function(s){var li=document.createElement("li");li.textContent=s[1];li.title=s[0];ring.appendChild(li);});
 
@@ -528,6 +599,7 @@ var ZOD=[
     $("elNama").textContent=el+(yang?" Yang":" Yin");
     $("elKet").textContent="Dari tahun Imlek "+ty;
     det("elDet",ELEMEN[el][1],ELEMEN[el][2],ELEMEN[el][3]);
+    deep(si,z,el,yang);
     refleksi([["Dari shio "+s[0],s[5]],["Dari zodiak "+z[0],z[6]],["Dari elemen "+el,ELEMEN[el][4]],["Penutup","Dari ketiganya, sifat mana yang paling terasa seperti kamu, dan mana yang ingin kamu kembangkan?"]]);
 
     SUM[1]={title:"Hasilku: shio "+s[0]+", zodiak "+z[0],lines:[s[1]+" Shio "+s[0]+" (tahun Imlek "+ty+")",z[1]+" Zodiak "+z[0]+" (elemen "+z[2]+")",ELEMEN[el][0]+" Elemen tahun lahir: "+el+(yang?" Yang":" Yin")]};
