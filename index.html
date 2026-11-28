@@ -76,7 +76,25 @@ input[type=text]{width:100%;font:inherit;font-size:1.05rem;padding:11px 12px;bor
 .row h3{margin:0 0 2px;font-size:1rem}
 .row .tag{margin:0 0 6px;font-size:.8rem;font-weight:700;color:var(--jade)}
 .row p.tx{margin:0;font-size:.92rem;color:var(--muted)}
+.banner{display:block;margin:28px 0 0;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.banner img{display:block;width:100%;height:auto}
+.acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.acts button{padding:10px 18px}
+.acts button.alt{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.acts .st{font-size:.88rem;color:var(--muted);min-height:1.2em}
 footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
+.faq{margin-top:32px}
+.faq>h2{font-family:var(--serif);font-size:1.4rem;margin:0 0 12px}
+.faq h3.grp{margin:20px 0 8px;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--jade)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:8px}
+.faq summary{cursor:pointer;font-weight:600;padding:13px 16px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:1.3rem;line-height:1;color:var(--gold);flex:none}
+.faq details[open] summary::after{content:"\2212"}
+.faq details>div{padding:0 16px 14px;font-size:.93rem;color:var(--muted)}
+.faq details>div p{margin:0 0 8px}
+.faq details>div ul{margin:0;padding-left:18px}
+.faq details>div li{margin:3px 0}
 </style>
 </head>
 <body>
@@ -112,6 +130,11 @@ footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
       <p>Gambaran di atas adalah cermin umum dari tradisi shio dan zodiak, bukan ramalan atau vonis. Tidak semua poin akan terasa cocok. Ambil yang terasa benar, abaikan sisanya, lalu coba jawab pertanyaan berikut dengan jujur.</p>
       <ol id="reflList"></ol>
     </section>
+    <div class="acts">
+        <button type="button" id="sh1">Bagikan</button>
+        <button type="button" class="alt" id="sv1">Simpan gambar</button>
+        <span class="st" id="st1" role="status" aria-live="polite"></span>
+      </div>
   </section>
 
   </div>
@@ -151,8 +174,75 @@ footer{margin-top:28px;font-size:.82rem;color:var(--muted)}
           <li>Satu hal kecil apa yang bisa kamu lakukan minggu ini agar hubungan ini terasa lebih nyaman?</li>
         </ol>
       </section>
+      <div class="acts">
+        <button type="button" id="sh2">Bagikan</button>
+        <button type="button" class="alt" id="sv2">Simpan gambar</button>
+        <span class="st" id="st2" role="status" aria-live="polite"></span>
+      </div>
     </section>
   </div>
+
+  <section class="faq" id="faq" aria-labelledby="faqH">
+    <h2 id="faqH">FAQ</h2>
+
+    <h3 class="grp">Privasi</h3>
+    <details>
+      <summary>Apakah tanggal lahir dan nama yang saya isi disimpan atau dikirim?</summary>
+      <div><p>Tidak. Semua perhitungan berjalan di browser kamu. Halaman ini tidak mengirim isian ke server mana pun, tidak memakai formulir yang dikirim ke pihak lain, dan tidak menyimpan data di perangkatmu (tanpa cookie, localStorage, atau sejenisnya). Menutup atau memuat ulang halaman menghapus isian dan hasilnya.</p></div>
+    </details>
+    <details>
+      <summary>Apakah halaman ini memakai pelacak atau iklan?</summary>
+      <div><p>Tidak. Halaman ini tidak memuat skrip analitik, pelacak, iklan, maupun pustaka dari pihak ketiga. Semua kode ada di dalam satu halaman.</p></div>
+    </details>
+    <details>
+      <summary>Nama pada tab Kecocokan dipakai untuk apa?</summary>
+      <div><p>Hanya untuk menampilkan label di kartu hasil pada layar kamu. Isian nama bersifat opsional dan tidak disimpan.</p></div>
+    </details>
+    <details>
+      <summary>Apakah ada data yang tetap tercatat di luar halaman ini?</summary>
+      <div><p>Halaman ini sendiri tidak mencatat apa pun. Namun seperti situs web pada umumnya, penyedia hosting dan jaringan internet yang kamu pakai bisa saja mencatat kunjungan teknis seperti alamat IP, di luar kendali halaman ini. Isian tanggal lahir dan nama tidak ikut terkirim.</p></div>
+    </details>
+    <details>
+      <summary>Bolehkah memasukkan tanggal lahir orang lain?</summary>
+      <div><p>Boleh, tetapi mintalah izin dulu kalau itu tanggal lahir orang dewasa lain. Untuk anak, orang tua atau walinya yang sebaiknya memutuskan.</p></div>
+    </details>
+
+    <h3 class="grp">Kebijakan penggunaan</h3>
+    <details>
+      <summary>Hasilnya bisa dipercaya sebagai ramalan?</summary>
+      <div><p>Tidak. Isi halaman ini adalah hiburan dan bahan refleksi diri berdasarkan tradisi shio, zodiak, dan lima elemen. Bukan ramalan, bukan prediksi, dan bukan nasihat profesional.</p></div>
+    </details>
+    <details>
+      <summary>Bolehkah hasilnya dipakai untuk keputusan penting?</summary>
+      <div><p>Sebaiknya jangan dijadikan satu-satunya dasar untuk keputusan tentang pernikahan, pekerjaan, keuangan, kesehatan, atau hukum. Untuk hal-hal tersebut, bicaralah dengan orang yang tepercaya atau ahli di bidangnya.</p></div>
+    </details>
+    <details>
+      <summary>Apa arti skor kecocokan?</summary>
+      <div><p>Skor hanyalah gabungan sederhana dari hubungan shio, elemen tahun, dan zodiak dua orang. Skor rendah tidak berarti hubungan gagal, dan skor tinggi tidak menjamin hubungan berjalan baik. Komunikasi dan usaha kedua pihak jauh lebih menentukan.</p></div>
+    </details>
+    <details>
+      <summary>Kenapa shio saya bisa berbeda dengan yang saya kira?</summary>
+      <div><p>Shio dan elemen tahun mengikuti Tahun Baru Imlek, bukan 1 Januari. Yang lahir sebelum Imlek di tahun itu memakai shio tahun sebelumnya. Zodiak memakai batas tanggal umum, jadi yang lahir tepat di pergantian bisa berbeda satu hari antar sumber.</p></div>
+    </details>
+    <details>
+      <summary>Apa yang boleh dan tidak boleh dilakukan dengan halaman ini?</summary>
+      <div>
+        <ul>
+          <li>Boleh dipakai untuk bersenang-senang, berefleksi, dan berbagi tautan halaman ini.</li>
+          <li>Jangan dipakai untuk menilai, mendiskriminasi, atau merendahkan seseorang berdasarkan shio atau zodiaknya.</li>
+          <li>Jangan menyajikan hasilnya sebagai fakta ilmiah, ramalan pasti, atau jaminan apa pun.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>Apakah ada jaminan akurasi dan ketersediaan?</summary>
+      <div><p>Halaman ini disediakan apa adanya, tanpa jaminan. Penghitungan batas Imlek memakai kalender Tionghoa bawaan browser. Kalau browser belum mendukungnya, batas diperkirakan 4 Februari dan akan ada catatan di hasil. Isi dan kebijakan ini bisa berubah sewaktu-waktu.</p></div>
+    </details>
+  </section>
+
+  <a class="banner" href="https://f11academyofficial.github.io/Analisa/" target="_blank" rel="noopener" aria-label="F11 Academy: Bedah Namamu, Petakan Potensimu. Coba numerologi nama dan tanggal lahir gratis">
+    <img src="banner.gif" width="728" height="90" alt="F11 Academy: Bedah Namamu, Petakan Potensimu. Numerologi nama dan tanggal lahir bersama Fino. Gratis. Coba Sekarang">
+  </a>
 
   <footer>Shio dan elemen tahun mengikuti Tahun Baru Imlek, bukan 1 Januari. Zodiak memakai batas tanggal umum, jadi yang lahir tepat di pergantian bisa berbeda satu hari antar sumber.</footer>
 </main>
@@ -339,7 +429,72 @@ var ZOD=[
     }else{
       note.hidden=true;
     }
+    var nA=$("n1").value.trim()||"Orang pertama", nB=$("n2").value.trim()||"Orang kedua";
+    SUM[2]={title:"Kecocokan "+nA+" & "+nB+": "+total+"/100 ("+lab(total)+")",lines:[
+      nA+": "+A.shio[1]+" "+A.shio[0]+", "+A.z[1]+" "+A.z[0]+", elemen "+A.el,
+      nB+": "+B.shio[1]+" "+B.shio[0]+", "+B.z[1]+" "+B.z[0]+", elemen "+B.el,
+      "Shio "+lab(rs[0])+" ("+rs[0]+"), elemen "+lab(re[0])+" ("+re[0]+"), zodiak "+lab(rz[0])+" ("+rz[0]+")"]};
     $("out2").hidden=false;
+  });
+
+  var SUM={1:null,2:null};
+  var PAGE=/^https?:/.test(location.href)?location.href.split("#")[0]:"https://f11academyofficial.github.io/Analisa/";
+  function shareText(t){return t.title+"\n"+t.lines.join("\n")+"\n\nCek punyamu di "+PAGE;}
+  function setSt(n,txt){var e=$("st"+n);e.textContent=txt;setTimeout(function(){if(e.textContent===txt)e.textContent="";},3500);}
+  function doShare(n){
+    var t=SUM[n]; if(!t) return;
+    var text=t.title+"\n"+t.lines.join("\n");
+    if(navigator.share){
+      navigator.share({title:t.title,text:text,url:PAGE}).catch(function(){});
+      return;
+    }
+    var full=shareText(t);
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(full).then(function(){setSt(n,"Teks hasil disalin.");},function(){setSt(n,"Gagal menyalin.");});
+    }else{
+      setSt(n,"Browser ini belum mendukung berbagi.");
+    }
+  }
+  function wrap(ctx,text,maxW){
+    var words=text.split(" "),out=[],cur="";
+    words.forEach(function(w){
+      var t=cur?cur+" "+w:w;
+      if(ctx.measureText(t).width>maxW&&cur){out.push(cur);cur=w;}else cur=t;
+    });
+    if(cur) out.push(cur); return out;
+  }
+  function doSave(n){
+    var t=SUM[n]; if(!t) return;
+    var W=1080,pad=72,maxW=W-pad*2,c=document.createElement("canvas"),ctx=c.getContext("2d");
+    var sans='system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',serif='Georgia,"Times New Roman",serif';
+    var blocks=[{f:"700 54px "+serif,c:"#1d2a3a",lh:66,tx:t.title,gap:28}];
+    t.lines.forEach(function(l){blocks.push({f:"400 34px "+sans,c:"#1d2a3a",lh:46,tx:l,gap:14});});
+    blocks.push({f:"400 26px "+sans,c:"#5b6b78",lh:36,tx:"Hanya gambaran dari tradisi shio dan zodiak, bukan ramalan. "+PAGE,gap:0,top:30});
+    var y=pad+10;
+    blocks.forEach(function(b){ctx.font=b.f;b.ls=wrap(ctx,b.tx,maxW);y+=(b.top||0)+b.ls.length*b.lh+b.gap;});
+    c.width=W;c.height=y+pad;
+    ctx.fillStyle="#fbfcfb";ctx.fillRect(0,0,W,c.height);
+    ctx.fillStyle="#b98a2c";ctx.fillRect(0,0,W,14);
+    ctx.textBaseline="top";
+    y=pad+10;
+    blocks.forEach(function(b){
+      ctx.font=b.f;ctx.fillStyle=b.c;y+=(b.top||0);
+      b.ls.forEach(function(l){ctx.fillText(l,pad,y);y+=b.lh;});
+      y+=b.gap;
+    });
+    c.toBlob(function(blob){
+      if(!blob){setSt(n,"Gagal membuat gambar.");return;}
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download=n===1?"hasil-shio-zodiak.png":"hasil-kecocokan.png";
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+      setSt(n,"Gambar disimpan.");
+    },"image/png");
+  }
+  [1,2].forEach(function(n){
+    $("sh"+n).addEventListener("click",function(){doShare(n);});
+    $("sv"+n).addEventListener("click",function(){doSave(n);});
   });
 
   var ring=$("ring");
@@ -374,6 +529,8 @@ var ZOD=[
     $("elKet").textContent="Dari tahun Imlek "+ty;
     det("elDet",ELEMEN[el][1],ELEMEN[el][2],ELEMEN[el][3]);
     refleksi([["Dari shio "+s[0],s[5]],["Dari zodiak "+z[0],z[6]],["Dari elemen "+el,ELEMEN[el][4]],["Penutup","Dari ketiganya, sifat mana yang paling terasa seperti kamu, dan mana yang ingin kamu kembangkan?"]]);
+
+    SUM[1]={title:"Hasilku: shio "+s[0]+", zodiak "+z[0],lines:[s[1]+" Shio "+s[0]+" (tahun Imlek "+ty+")",z[1]+" Zodiak "+z[0]+" (elemen "+z[2]+")",ELEMEN[el][0]+" Elemen tahun lahir: "+el+(yang?" Yang":" Yin")]};
 
     Array.prototype.forEach.call(ring.children,function(li,i){
       if(i===si) li.setAttribute("aria-current","true"); else li.removeAttribute("aria-current");
